@@ -1,0 +1,575 @@
+<!DOCTYPE html><html><head><meta http-equiv=Content-Type content="text/html; charset=utf-8"><meta title=viewport content="initial-scale=1.0, user-scalable=no"><style type=text/css>input{
+		padding: 0;
+		margin:0;
+	}
+	body, html,#all,#allmap {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		margin:0;
+		font-family:"微软雅黑";
+	}
+	#all{
+		position: relative;
+	}
+	#search{
+		position: absolute;
+		top:50px;
+		right: 30px;
+	}
+	#searchinp{
+		height: 23px;
+		padding: 0 10px;
+		border: 1px solid #000;
+	}
+	#searchinp:focus{
+		outline: none;
+		border: 1px solid #000;
+	}
+	#searchbtn{
+		height: 25px;
+		padding: 0 10px;
+		cursor: pointer;
+	}
+	.demo{
+		width: 100px;
+		position: absolute;
+		top:100px;
+		right:30px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.iscompeleted,.nocompeleted,.areacode,.all{
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		color : #fff;
+		padding:2px 5px;
+		border:none;
+		border-radius:5px;
+		background:blue;
+		font-size : 12px;
+		font-family:微软雅黑;
+		cursor: pointer;
+	}
+	.iscompeleted{
+		margin-top:10px;
+	}
+	.nocompeleted{
+		background:red;
+		margin-top:10px;
+	}
+	.areacode{
+		background:#aaa;
+		color: #fff;
+		margin-top:10px;
+	}</style><script type=text/javascript src="//api.map.baidu.com/api?v=2.0&ak=u8wNnYtQ5BS22By8QI3crgaDAoMWaWEG"></script><title>地图展示</title><link href=/static/css/app.d993588ac35277bc478085f5cbb67f2d.css rel=stylesheet></head><body><div id=all><div id=allmap></div><div id=search><input type=text id=searchinp> <button id=searchbtn>搜索</button></div><div class=demo><p class=all>全部</p><p class=iscompeleted>有现房</p><p class=nocompeleted>期房</p><p class=areacode id=code1>中原区</p><p class=areacode id=code2>二七区</p><p class=areacode id=code3>管城区</p><p class=areacode id=code4>金水区</p><p class=areacode id=code5>经开区</p><p class=areacode id=code6>郑东新区</p></div></div><script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.3bf08807642cffd4f854.js></script><script type=text/javascript src=/static/js/app.0092732f0e829bb0fd16.js></script></body></html><script type=text/javascript>// 注：areacode
+	// 中原区:1
+	// 二七区:2
+	// 管城区:3
+	// 金水区:4
+	// 经开区:5
+	// 郑东新区:6
+	var list=[
+		{
+			title:'汇泉景悦城',
+			subtitle:'汇泉景悦城',
+			money:33,
+			area:78,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'汇泉西悦城',
+			subtitle:'汇泉西悦城',
+			money:32,
+			area:88,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'中原华侨城',
+			subtitle:'郑州市中原区中原西路与杭州路交叉口西北角',
+			money:36,
+			area:108,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'风和朗庭',
+			subtitle:'风和朗庭',
+			money:30,
+			area:84,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'阳光城丽景公馆',
+			subtitle:'阳光城丽景公馆',
+			money:27,
+			area:75,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'啟福城',
+			subtitle:'一鸣双语幼儿园',
+			money:84,
+			area:31,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'亚星金运外滩',
+			subtitle:'亚星金运外滩',
+			money:30,
+			area:82,
+			iscompeleted:true,
+			areacode:2
+		},
+		{	
+			title:'嘉业嘉境上品',
+			subtitle:'嘉业长江一号',
+			money:31,
+			area:79,
+			iscompeleted:false,
+			areacode:2
+		},
+		{
+			title:'九龙新城',
+			subtitle:'九龙新城',
+			money:30,
+			area:90,
+			iscompeleted:true,
+			areacode:5
+		},
+		{
+			title:'碧桂园名门时代城',
+			subtitle:'小李庄农贸批发市场',
+			money:33,
+			area:89,
+			iscompeleted:false,
+			areacode:3
+		},
+		{
+			title:'郑州华侨城',
+			subtitle:'郑州华侨城',
+			money:37,
+			area:95,
+			iscompeleted:false,
+			areacode:2
+		},
+		{
+			title:'绿地花语城',
+			subtitle:'绿地花语城',
+			money:30,
+			area:82,
+			iscompeleted:false,
+			areacode:3
+		},
+		{
+			title:'城果',
+			subtitle:'城果',
+			money:24,
+			area:51,
+			iscompeleted:true,
+			areacode:4
+		},
+		{
+			title:'绿都东澜岸',
+			subtitle:'绿都东澜岸',
+			money:31,
+			area:105,
+			iscompeleted:false,
+			areacode:5
+		},
+		{
+			title:'保利金茂时光悦',
+			subtitle:'郑州宇通电池厂',
+			money:29,
+			area:89,
+			iscompeleted:false,
+			areacode:5
+		},
+		{
+			title:'佳源·名门橙邦',
+			subtitle:'名门橙邦',
+			money:37,
+			area:83,
+			iscompeleted:true,
+			areacode:2
+		},
+		{
+			title:'锦美南华福',
+			subtitle:'老唐米线(锦美南华府店)',
+			money:33,
+			area:76,
+			iscompeleted:true,
+			areacode:2
+		},
+		{
+			title:'宏江瀚苑',
+			subtitle:'宏江瀚苑',
+			money:39,
+			area:84,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'升龙御玺',
+			subtitle:'升龙御玺',
+			money:36,
+			area:81,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'碧桂园凤凰城',
+			subtitle:'河南省航海健身园',
+			money:41,
+			area:89,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'泰宏建业国际城',
+			subtitle:'泰宏建业国际城',
+			money:36,
+			area:87,
+			iscompeleted:false,
+			areacode:2
+		},
+		{
+			title:'正商中州城',
+			subtitle:'正商中州城',
+			money:37,
+			area:67,
+			iscompeleted:true,
+			areacode:3
+		},
+		{
+			title:'龙源世纪龙城',
+			subtitle:'龙源世纪龙城',
+			money:35,
+			area:77,
+			iscompeleted:true,
+			areacode:3
+		},
+		{
+			title:'春江家园',
+			subtitle:'春江家园',
+			money:37,
+			area:95,
+			iscompeleted:true,
+			areacode:2
+		},
+		{
+			title:'郑州绿地城',
+			subtitle:'二七区滨河花园实验小学',
+			money:35,
+			area:90,
+			iscompeleted:true,
+			areacode:2
+		},
+		// {
+		// 	title:'中原华侨城',
+		// 	subtitle:'郑州市中原区中原西路与西四环交叉路口往西约200米(郑州星源外国语学校-高中部南侧约100米)',
+		// 	money:31,
+		// 	area:89,
+		// 	iscompeleted:false,
+		// 	areacode:1
+		// },
+		{
+			title:'裕华城',
+			subtitle:'河南省郑州市中原区通达路与西四环交会处东300米路南',
+			money:33,
+			area:78,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'金地西湖春晓',
+			subtitle:'河南省郑州市中原区中原西路与杭州路交叉口向南150米路西',
+			money:34,
+			area:94,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'和润林湖美景',
+			subtitle:'和润林湖美景',
+			money:35,
+			area:76,
+			iscompeleted:true,
+			areacode:1
+		},
+		{
+			title:'汇泉博澳东悦城',
+			subtitle:'汇泉博澳东悦城',
+			money:32,
+			area:89,
+			iscompeleted:true,
+			areacode:6
+		},
+		{
+			title:'永威西郡',
+			subtitle:'永威西郡',
+			money:40,
+			area:89,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'盛世卧龙城',
+			subtitle:'盛世卧龙城',
+			money:36,
+			area:85,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'融侨悦城',
+			subtitle:'中共外资企业管理中等专业学校支部委员会',
+			money:35,
+			area:89,
+			iscompeleted:false,
+			areacode:1
+		},
+		{
+			title:'中信广场',
+			subtitle:'河南省郑州市中原区中原中路125号附近',
+			money:34,
+			area:80,
+			iscompeleted:false,
+			areacode:1
+		},
+	]
+	// 百度地图API功能
+	var map = new BMap.Map("allmap",{enableMapClick:false});    // 创建Map实例
+	map.centerAndZoom(new BMap.Point(113.7, 34.735), 13);  // 初始化地图,设置中心点坐标和地图级别
+	map.setCurrentCity("郑州");          // 设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+	var local = new BMap.LocalSearch(map, {
+		renderOptions:{map: map}
+	});    
+	var myGeo = new BMap.Geocoder(); 
+
+	function showPoint(obj,isSearch){
+		myGeo.getPoint(obj.subtitle, function(point){ 
+			if(point.lat==34.753439 && point.lng==113.631419){
+				alert('大概没有此楼盘')
+				return
+			}
+			if (point) {
+				var marker=new BMap.Marker(point,{
+					icon: new BMap.Symbol(BMap_Symbol_SHAPE_POINT, {
+						scale: 0.8,
+						strokeWeight: 1,
+						rotation: 0,//顺时针旋转30度
+						fillColor: 'red',
+						fillOpacity: 0.8
+					})
+				})
+				if(!isSearch){    
+					var infoOpts = {
+						width : 200,     // 信息窗口宽度
+						height: 80,     // 信息窗口高度
+					}
+					var infoWindow = new BMap.InfoWindow("<p style='padding-top:15px;color:#000;'>"+"<span style='color:red;'>"+obj.title+"</span>"+"，首付"+"<span style='color:red;'>"+obj.money+"</span>"+"万,建筑面积"+"<span style='color:red;'>"+obj.area+"</span>"+"平方米。"+"</p>", infoOpts); 
+					marker.addEventListener("click", function(){     
+						map.openInfoWindow(infoWindow, point); //开启信息窗口
+					});
+				}
+
+				map.addOverlay(marker);  
+				// marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+
+				var opts = {
+					position : point,    // 指定文本标注所在的地理位置
+					offset   : new BMap.Size(10, -15)    //设置文本偏移量
+				}   
+				var label = isSearch?new BMap.Label(obj.subtitle, opts):new BMap.Label(obj.title, opts);  // 创建文本标注对象
+				if(obj.iscompeleted){
+					label.setStyle({
+						color : "#fff",
+						padding:"0 5px",
+						border:"none",
+						borderRadius:"5px",
+						background:"blue",
+						fontSize : "12px",
+						height : "14px",
+						lineHeight : "14px",
+						fontFamily:"微软雅黑"
+					});
+				}else{
+					label.setStyle({
+						color : "#fff",
+						padding:"0 5px",
+						border:"none",
+						borderRadius:"5px",
+						background:"red",
+						fontSize : "12px",
+						height : "14px",
+						lineHeight : "14px",
+						fontFamily:"微软雅黑"
+					});
+				}
+				map.addOverlay(label); 
+			}else{
+				console.log(isSearch?'没有获取到郑州市'+obj.subtitle+'售楼部的坐标':'没有获取到郑州市'+obj.title+'售楼部的坐标')
+			}
+		}, 
+		"郑州市");
+	}
+
+	list.forEach(item=>{
+		showPoint(item,false)
+	})
+
+	function search(){
+		map.clearOverlays()
+		if(document.getElementById('searchinp').value){
+			let obj={
+				title:'',
+				subtitle:document.getElementById('searchinp').value,
+				money:0,
+				area:0
+			}
+			showPoint(obj,true)
+		}
+	}
+
+	document.getElementById('searchbtn').addEventListener('click',search)
+
+	window.addEventListener('keydown',(e)=>{
+		if(e.keyCode===13){
+			search()
+		}
+	})
+
+	document.getElementsByClassName('all')[0].style.background='green'
+	window.areacode=0
+
+	function resetstyle(){
+		for(let i=0;i<document.getElementsByClassName('areacode').length;i++){
+			document.getElementsByClassName('areacode')[i].style.background='#aaa'
+		}
+	}
+
+	document.getElementsByClassName('all')[0].addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=0
+		list.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=list
+		resetstyle()
+		// document.getElementsByClassName('all')[0].style.background='#000'
+	})
+
+	document.getElementById('code1').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=1
+		let olist=list.filter(item=>item.areacode==1)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code1').style.background='#000'
+	})
+
+	document.getElementById('code2').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=2
+		let olist=list.filter(item=>item.areacode==2)
+		console.log(olist)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code2').style.background='#000'
+	})
+
+	document.getElementById('code3').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=3
+		let olist=list.filter(item=>item.areacode==3)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code3').style.background='#000'
+	})
+
+	document.getElementById('code4').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=4
+		let olist=list.filter(item=>item.areacode==4)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code4').style.background='#000'
+	})
+
+	document.getElementById('code5').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=5
+		let olist=list.filter(item=>item.areacode==5)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code5').style.background='#000'
+	})
+
+	document.getElementById('code6').addEventListener('click',()=>{
+		map.clearOverlays()
+		window.areacode=6
+		let olist=list.filter(item=>item.areacode==6)
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		window.currentlist=olist
+		resetstyle()
+		document.getElementById('code6').style.background='#000'
+	})
+
+	document.getElementsByClassName('iscompeleted')[0].addEventListener('click',()=>{
+		console.log(window.currentlist)
+		if(!window.currentlist || window.currentlist.length==list.length){
+			map.clearOverlays()
+			list.filter(item=>item.iscompeleted).forEach(item=>{
+				showPoint(item,false)
+			})
+			return
+		}
+		let olist=window.currentlist.filter(item=>item.areacode==window.areacode).filter(item=>item.iscompeleted)
+		map.clearOverlays()
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		// window.iscompeleted=true
+	})
+
+	document.getElementsByClassName('nocompeleted')[0].addEventListener('click',()=>{
+		if(!window.currentlist || window.currentlist.length==list.length){
+			map.clearOverlays()
+			list.filter(item=>!item.iscompeleted).forEach(item=>{
+				showPoint(item,false)
+			})
+			return
+		}
+		let olist=window.currentlist.filter(item=>item.areacode==window.areacode).filter(item=>!item.iscompeleted)
+		map.clearOverlays()
+		olist.forEach(item=>{
+			showPoint(item,false)
+		})
+		// window.iscompeleted=false
+	})</script>
